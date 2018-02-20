@@ -2,7 +2,7 @@ import numpy as np, keras.callbacks as keras, sys
 from unet.unet import Unet
 
 data_dir = 'images/data/'
-results_dir = 'results'
+results_dir = 'results/'
 lesion_types = ['MA','HE','EX','SE','OD']
 selected_type = 'MA' # Default
 if sys.argv and sys.argv[0] in lesion_types:
@@ -11,7 +11,6 @@ if sys.argv and sys.argv[0] in lesion_types:
 # Get U-Net model
 cnn = Unet(1024, 1024, 3).model
 print("Initialized U-Net")
-
 print('-' * 30)
 
 # Get data
@@ -32,7 +31,6 @@ test_data /= 255 # Scale to 0..1
 print("Loaded test data")
 
 print("Training dataset size: %d, Test dataset size: %d" % (len(train_data), len(test_data)))
-
 print('-' * 30)
 
 # Train U-Net
@@ -48,4 +46,4 @@ print('-' * 30)
 
 print('Predicting test data...')
 test_predictions = cnn.predict(test_data, batch_size=1, verbose=1)
-np.save(results_dir + '/predictions', test_predictions)
+np.save(results_dir + 'predictions', test_predictions)
