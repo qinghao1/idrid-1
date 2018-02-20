@@ -1,3 +1,3 @@
 [submodule "unet"]
-	path = unet_original
+	path = unet
 	url = https://github.com/zhixuhao/unet.git
