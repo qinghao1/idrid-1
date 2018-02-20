@@ -50,9 +50,9 @@ for idx, filename in enumerate(train_image_files):
 	for lesion in lesion_types:
 		gt_label = lesion + '_mask' # 'MA_mask'
 		if ground_truth.shape[0] and ground_truth[gt_label][0][0].shape[0]:
-			train_labels[lesion].append(ground_truth[gt_label][0][0].reshape(image.shape[:-1]))
+			train_labels[lesion].append(ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,)))
 		else:
-			train_labels[lesion].append(np.zeros(image.shape[:-1]))
+			train_labels[lesion].append(np.zeros(image.shape[:-1] + (1,)))
 
 
 	print('Processed training file %d of %d: %s' 
@@ -74,9 +74,9 @@ for idx, filename in enumerate(test_image_files):
 	for lesion in lesion_types:
 		gt_label = lesion + '_mask' # 'MA_mask'
 		if ground_truth.shape[0] and ground_truth[gt_label][0][0].shape[0]:
-			test_labels[lesion].append(ground_truth[gt_label][0][0].reshape(image.shape[:-1]))
+			test_labels[lesion].append(ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,)))
 		else:
-			test_labels[lesion].append(np.zeros(image.shape[:-1]))
+			test_labels[lesion].append(np.zeros(image.shape[:-1] + (1,)))
 
 
 	print('Processed training file %d of %d: %s' 
