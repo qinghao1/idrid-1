@@ -1,6 +1,7 @@
 import scipy.io as sio, numpy as np, glob, imageio, re, copy
-images_dir = '../images/raw/*.mat'
-save_dir = '../images/jpg/'
+
+images_dir = 'images/raw/*.mat'
+save_dir = 'images/jpg/'
 
 image_files = glob.glob(images_dir)
 image_files.sort()

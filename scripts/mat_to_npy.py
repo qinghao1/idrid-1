@@ -2,8 +2,8 @@ import scipy.io as sio, numpy as np, glob, imageio, re, copy, random
 
 train_test_ratio = 0.9
 
-images_dir = '../images/raw/*.mat'
-save_dir = '../images/data/'
+images_dir = 'images/raw/*.mat'
+save_dir = 'images/data/'
 
 image_files = glob.glob(images_dir)
 image_files.sort()
