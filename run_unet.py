@@ -10,6 +10,7 @@ from unet.unet import Unet
 
 # Get U-Net model
 cnn = Unet(1024, 1024, 3)
+print("Initialized U-Net")
 
 # Get data
 
