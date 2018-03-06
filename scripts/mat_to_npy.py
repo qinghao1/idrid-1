@@ -1,6 +1,10 @@
-import scipy.io as sio, numpy as np, glob, imageio, re, copy, random
+import scipy.io as sio, numpy as np, skimage.transform as imtransform, glob, imageio, re, copy, random
 
 train_test_ratio = 0.9
+
+# Resize options
+resize_image = True
+new_dimensions = (512, 512,)
 
 images_dir = 'images/raw/*.mat'
 save_dir = 'images/data/'
@@ -44,15 +48,25 @@ for idx, filename in enumerate(train_image_files):
 	image = data[original_image_label]
 	ground_truth = data[ground_truth_label]
 
-	train_data.append(image)
-
+	if resize_image:
+		resized_image = imtransform.resize(image, new_dimensions)
+		train_data.append(resized_image)
+	else:
+		train_data.append(image)
 	
 	for lesion in lesion_types:
 		gt_label = lesion + '_mask' # 'MA_mask'
 		if ground_truth.shape[0] and ground_truth[gt_label][0][0].shape[0]:
-			train_labels[lesion].append(ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,)))
+			gt_image = ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,))
+			if resize_image:
+				gt_image = imtransform.resize(gt_image, new_dimensions)
+				np.round(gt_image) # Round decimals to 0 or 1
+			train_labels[lesion].append(gt_image)
 		else:
-			train_labels[lesion].append(np.zeros(image.shape[:-1] + (1,)))
+			if resize_image:
+				train_labels[lesion].append(np.zeros(new_dimensions + (1,)))
+			else:
+				train_labels[lesion].append(np.zeros(image.shape[:-1] + (1,)))
 
 
 	print('Processed training file %d of %d: %s' 
@@ -68,15 +82,25 @@ for idx, filename in enumerate(test_image_files):
 	image = data[original_image_label]
 	ground_truth = data[ground_truth_label]
 
-	test_data.append(image)
+	if resize_image:
+		resized_image = imtransform.resize(image, new_dimensions)
+		test_data.append(resized_image)
+	else:
+		test_data.append(image)
 
-	
 	for lesion in lesion_types:
 		gt_label = lesion + '_mask' # 'MA_mask'
 		if ground_truth.shape[0] and ground_truth[gt_label][0][0].shape[0]:
-			test_labels[lesion].append(ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,)))
+			gt_image = ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,))
+			if resize_image:
+				gt_image = imtransform.resize(gt_image, new_dimensions)
+				np.round(gt_image) # Round decimals to 0 or 1
+			test_labels[lesion].append(gt_image)
 		else:
-			test_labels[lesion].append(np.zeros(image.shape[:-1] + (1,)))
+			if resize_image:
+				test_labels[lesion].append(np.zeros(new_dimensions + (1,)))
+			else:
+				test_labels[lesion].append(np.zeros(image.shape[:-1] + (1,)))
 
 
 	print('Processed training file %d of %d: %s' 
