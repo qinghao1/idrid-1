@@ -1,3 +1,5 @@
+# Large files
 images/data/*.npy
+models/*.hdf5
 
 .DS_Store
