@@ -2,7 +2,7 @@ import numpy as np, keras.callbacks as keras, sys
 from unet.unet import Unet
 
 data_dir = 'images/data/'
-lesion_types = ['MA','HE','EX','SE','OD']
+lesion_types = ['MA','HE','EX','SE']
 selected_type = 'MA' # Default
 if sys.argv and sys.argv[1] in lesion_types:
 	selected_type = sys.argv[1]
@@ -28,9 +28,9 @@ print('-' * 30)
 
 # Train U-Net
 
-print('Loading pre-trained weights...')
-cnn.load_weights('models/MA_unet_10.hdf5')
-print('Loaded weights')
+# print('Loading pre-trained weights...')
+# cnn.load_weights('models/OD_unet.hdf5')
+# print('Loaded weights')
 
 model_checkpoint = keras.ModelCheckpoint('models/' + selected_type + '_unet.hdf5', monitor='loss',verbose=1, save_best_only=True)
 print('Fitting model...')

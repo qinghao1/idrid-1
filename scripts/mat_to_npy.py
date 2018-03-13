@@ -16,7 +16,12 @@ test_image_files = [f for f in image_files if f not in train_image_files]
 
 original_image_label = 'I_cropped'
 ground_truth_label = 'GT'
-lesion_types = ['MA','HE','EX','SE','OD']
+lesion_types = [
+	'MA',
+	'HE',
+	'EX',
+	'SE',
+]
 
 file_name_regex = '([^/]*)$'
 
@@ -27,7 +32,6 @@ train_labels = {
 	'HE':[],
 	'EX':[],
 	'SE':[],
-	'OD':[],
 }
 test_data = []
 test_labels = {
@@ -35,7 +39,6 @@ test_labels = {
 	'HE':[],
 	'EX':[],
 	'SE':[],
-	'OD':[],
 }
 
 # Training files
@@ -57,11 +60,12 @@ for idx, filename in enumerate(train_image_files):
 	for lesion in lesion_types:
 		gt_label = lesion + '_mask' # 'MA_mask'
 		if ground_truth.shape[0] and ground_truth[gt_label][0][0].shape[0]:
-			gt_image = ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,))
+			gt_mask = ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,))
 			if resize_image:
-				gt_image = imtransform.resize(gt_image, new_dimensions)
-				np.round(gt_image) # Round decimals to 0 or 1
-			train_labels[lesion].append(gt_image)
+				gt_mask = imtransform.resize(gt_mask, new_dimensions)
+				# Interpolation makes mask become decimal values, ceil them to 1
+				gt_mask[gt_mask > 0] = 1
+			train_labels[lesion].append(gt_mask)
 		else:
 			if resize_image:
 				train_labels[lesion].append(np.zeros(new_dimensions + (1,)))
@@ -91,11 +95,12 @@ for idx, filename in enumerate(test_image_files):
 	for lesion in lesion_types:
 		gt_label = lesion + '_mask' # 'MA_mask'
 		if ground_truth.shape[0] and ground_truth[gt_label][0][0].shape[0]:
-			gt_image = ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,))
+			gt_mask = ground_truth[gt_label][0][0].reshape(image.shape[:-1] + (1,))
 			if resize_image:
-				gt_image = imtransform.resize(gt_image, new_dimensions)
-				np.round(gt_image) # Round decimals to 0 or 1
-			test_labels[lesion].append(gt_image)
+				gt_mask = imtransform.resize(gt_mask, new_dimensions)
+				# Interpolation makes mask become decimal values, ceil them to 1
+				gt_mask[gt_mask > 0] = 1
+			test_labels[lesion].append(gt_mask)
 		else:
 			if resize_image:
 				test_labels[lesion].append(np.zeros(new_dimensions + (1,)))

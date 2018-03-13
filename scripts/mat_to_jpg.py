@@ -1,10 +1,14 @@
-import scipy.io as sio, numpy as np, glob, imageio, re, copy
+import scipy.io as sio, numpy as np, skimage.transform as imtransform, glob, imageio, re, copy
 
 images_dir = 'images/raw/*.mat'
 save_dir = 'images/jpg/'
 
 image_files = glob.glob(images_dir)
 image_files.sort()
+
+# Resize options
+resize_image = True
+new_dimensions = (512, 512,)
 
 original_image_label = 'I_cropped'
 ground_truth_label = 'GT'
@@ -29,6 +33,9 @@ for idx, filename in enumerate(image_files):
 	image = data[original_image_label]
 	ground_truth = data[ground_truth_label]
 
+	if resize_image:
+		image = imtransform.resize(image, new_dimensions)
+
 	# Save original image as JPG
 	imageio.imwrite(
 		save_dir
@@ -44,6 +51,9 @@ for idx, filename in enumerate(image_files):
 			gt_mask = ground_truth[gt_label][0][0] # Array of 1s and 0s
 			if gt_mask.shape[0]: # Check if gt_mask is empty 2d list [[]]
 				# Save ground truth as jpg
+				if resize_image:
+					gt_mask = imtransform.resize(gt_mask, new_dimensions)
+					np.round(gt_mask) # Round decimals to 0 or 1
 				gt_image = maskImage(image, gt_mask)
 				imageio.imwrite(
 					save_dir
