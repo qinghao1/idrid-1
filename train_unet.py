@@ -16,7 +16,6 @@ print('-' * 30)
 # Get data
 train_data = np.load(data_dir + 'train_data.npy')
 train_data = train_data.astype('float32')
-train_data /= 255 # Scale to 0..1
 print("Loaded training data")
 
 train_labels = np.load(data_dir + 'train_label_' + selected_type + '.npy')
