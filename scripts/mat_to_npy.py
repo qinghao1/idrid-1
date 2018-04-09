@@ -4,7 +4,7 @@ train_test_ratio = 0.9
 
 # Resize options
 resize_image = True
-new_dimensions = (512, 512,)
+new_dimensions = (384, 384,)
 
 images_dir = 'images/raw/*.mat'
 save_dir = 'images/data/'
@@ -21,6 +21,7 @@ lesion_types = [
 	'HE',
 	'EX',
 	'SE',
+	'OD',
 ]
 
 file_name_regex = '([^/]*)$'
@@ -32,6 +33,7 @@ train_labels = {
 	'HE':[],
 	'EX':[],
 	'SE':[],
+	'OD':[]
 }
 test_data = []
 test_labels = {
@@ -39,6 +41,7 @@ test_labels = {
 	'HE':[],
 	'EX':[],
 	'SE':[],
+	'OD':[]
 }
 
 # Training files
